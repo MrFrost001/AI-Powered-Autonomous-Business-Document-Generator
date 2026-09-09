@@ -1,0 +1,341 @@
+/* ---------------------------------------------------------------
+   Autonomous Document Agent — front end
+   Design concept: an office ledger / archival record book.
+   The agent's task list is a real running log, so it is set in
+   monospace deliberately — that's what it is, not a decoration.
+----------------------------------------------------------------- */
+
+:root {
+  --paper: #EDEFEA;
+  --paper-raised: #F6F7F3;
+  --ink: #1C2B3A;
+  --ink-soft: #52626F;
+  --ink-faint: #8A96A0;
+  --rule: #C9CDBF;
+  --brass: #A9792C;
+  --done: #3F6E52;
+  --alert: #8C3B2E;
+
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", "SF Mono", Consolas, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { color-scheme: light; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 64px 24px 96px;
+}
+
+/* ---------- Masthead ---------- */
+
+.masthead { margin-bottom: 40px; }
+
+.kicker {
+  margin: 0 0 10px;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--brass);
+}
+
+.masthead h1 {
+  font-family: var(--serif);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: 42px;
+  line-height: 1.05;
+  margin: 0 0 18px;
+  color: var(--ink);
+  max-width: 11ch;
+}
+
+.subhead {
+  margin: 0;
+  max-width: 46ch;
+  color: var(--ink-soft);
+  font-size: 15px;
+}
+
+/* ---------- Connection strip ---------- */
+
+.connection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  margin-bottom: 32px;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  font-size: 13px;
+}
+
+.connection label {
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.connection input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink);
+  padding: 4px 2px;
+}
+
+.connection input:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink-faint);
+  flex-shrink: 0;
+}
+
+.status-dot.online { background: var(--done); }
+.status-dot.offline { background: var(--alert); }
+
+.status-text {
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* ---------- Composer ---------- */
+
+.composer {
+  margin-bottom: 40px;
+}
+
+.composer label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+.composer textarea {
+  width: 100%;
+  resize: vertical;
+  background: var(--paper-raised);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 15px;
+  line-height: 1.6;
+  padding: 14px 16px;
+}
+
+.composer textarea:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 1px;
+}
+
+.composer-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+
+button, .download-btn {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  padding: 11px 20px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+
+button:hover:not(:disabled), .download-btn:hover {
+  background: var(--brass);
+  border-color: var(--brass);
+}
+
+button:focus-visible, .download-btn:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.composer-hint {
+  color: var(--ink-faint);
+  font-size: 12.5px;
+}
+
+/* ---------- Error panel ---------- */
+
+.panel {
+  padding: 14px 16px;
+  margin-bottom: 32px;
+  border: 1px solid var(--alert);
+  background: var(--paper-raised);
+  font-size: 13.5px;
+  color: var(--alert);
+}
+
+.panel strong { color: var(--ink); }
+
+.panel ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+/* ---------- Agent log ---------- */
+
+.log-section { margin-bottom: 40px; }
+
+.log-section h2, .result-head h2, .sub-block h3 {
+  font-family: var(--serif);
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.log-section h2 { font-size: 18px; margin: 0 0 14px; }
+
+.log-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.log-list li {
+  display: grid;
+  grid-template-columns: 26px 1fr minmax(0, 260px);
+  gap: 10px;
+  align-items: baseline;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: 13.5px;
+  opacity: 0;
+  transform: translateY(4px);
+  animation: reveal 0.28s ease forwards;
+}
+
+@keyframes reveal {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.log-glyph { color: var(--ink-faint); }
+.log-glyph.done { color: var(--done); }
+.log-glyph.failed { color: var(--alert); }
+.log-glyph.running { color: var(--brass); }
+
+.log-name { color: var(--ink); }
+.log-detail {
+  color: var(--ink-soft);
+  text-align: right;
+  font-size: 12.5px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* ---------- Result ---------- */
+
+.result-section { margin-top: 8px; }
+
+.rule {
+  border-top: 1px solid var(--rule);
+  margin: 0 0 32px;
+}
+
+.result-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.result-head h2 {
+  font-size: 24px;
+  margin: 0;
+  max-width: 34ch;
+}
+
+.badge {
+  font-size: 11px;
+  letter-spacing: 0.03em;
+  padding: 4px 9px;
+  border: 1px solid var(--brass);
+  color: var(--brass);
+  white-space: nowrap;
+}
+
+.badge.fallback {
+  border-color: var(--ink-faint);
+  color: var(--ink-soft);
+}
+
+.result-type {
+  margin: 6px 0 28px;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+}
+
+.sub-block { margin-bottom: 28px; }
+
+.sub-block h3 { font-size: 15px; margin: 0 0 10px; }
+
+.sub-block ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.sub-block li {
+  margin-bottom: 8px;
+  font-size: 13.5px;
+  color: var(--ink);
+}
+
+.download-btn {
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* ---------- Utility ---------- */
+
+.hidden { display: none !important; }
+
+@media (max-width: 480px) {
+  .masthead h1 { font-size: 34px; max-width: none; }
+  .page { padding: 40px 18px 72px; }
+  .log-list li { grid-template-columns: 22px 1fr; }
+  .log-detail { grid-column: 1 / -1; text-align: left; padding-left: 32px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .log-list li {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  button, .download-btn { transition: none; }
+}

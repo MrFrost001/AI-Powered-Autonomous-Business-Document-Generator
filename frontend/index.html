@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Autonomous Document Agent</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div class="page">
+
+  <header class="masthead">
+    <p class="kicker">app / agent</p>
+    <h1>Autonomous Document Agent</h1>
+    <p class="subhead">
+      Describe the document you need in one sentence. The agent plans it,
+      drafts every section, checks its own work, and hands you a finished
+      .docx.
+    </p>
+  </header>
+
+  <section class="connection" aria-label="Backend connection">
+    <label for="api-base">Agent URL</label>
+    <input type="text" id="api-base" value="" spellcheck="false" autocomplete="off" />
+    <span class="status-dot" id="status-dot" title="Connection unknown"></span>
+    <span class="status-text" id="status-text">checking&hellip;</span>
+  </section>
+
+  <form id="request-form" class="composer">
+    <label for="request-input">What do you need drafted?</label>
+    <textarea
+      id="request-input"
+      rows="4"
+      placeholder="e.g. Create a project plan for launching a new mobile banking bill-split feature in Q3, including timeline, budget and risks."
+      required
+      minlength="3"
+      maxlength="4000"
+    ></textarea>
+    <div class="composer-row">
+      <button type="submit" id="generate-btn">Generate document</button>
+      <span class="composer-hint">Vague is fine — the agent will state its assumptions instead of asking questions.</span>
+    </div>
+  </form>
+
+  <section id="error-panel" class="panel alert hidden" role="alert"></section>
+
+  <section id="log-section" class="log-section hidden" aria-live="polite">
+    <h2>Agent log</h2>
+    <ol id="log-list" class="log-list"></ol>
+  </section>
+
+  <section id="result-section" class="result-section hidden">
+    <div class="rule"></div>
+
+    <div class="result-head">
+      <h2 id="result-title"></h2>
+      <span id="result-mode" class="badge"></span>
+    </div>
+    <p id="result-type" class="result-type"></p>
+
+    <div id="assumptions-block" class="sub-block hidden">
+      <h3>Assumptions made</h3>
+      <ul id="assumptions-list"></ul>
+    </div>
+
+    <div id="selfcheck-block" class="sub-block">
+      <h3>Self-check</h3>
+      <ul id="selfcheck-list"></ul>
+    </div>
+
+    <a id="download-link" class="download-btn hidden" target="_blank" rel="noopener">
+      Download .docx
+    </a>
+  </section>
+
+</div>
+
+<script src="script.js" defer></script>
+</body>
+</html>
