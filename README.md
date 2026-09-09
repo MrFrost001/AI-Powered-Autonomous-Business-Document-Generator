@@ -142,7 +142,7 @@ path and says so in the response (`generation_mode: "fallback_template"`).
 |--------------------|-----------------------------------------------------------------|
 | API framework       | [FastAPI](https://fastapi.tiangolo.com/)                        |
 | LLM orchestration   | [LangChain](https://python.langchain.com/) (`langchain-core`, `langchain-groq`) |
-| LLM provider        | [Groq](https://console.groq.com/) (free-tier, e.g. `llama-3.3-70b-versatile`) |
+| LLM provider        | [Groq](https://console.groq.com/) (free-tier, e.g. `openai/gpt-oss-20b`) |
 | Structured output   | Pydantic v2 + LangChain's `PydanticOutputParser`                 |
 | Document generation | [python-docx](https://python-docx.readthedocs.io/)               |
 | Frontend            | Static HTML/CSS/JS (no build step), served by FastAPI's `StaticFiles` |
