@@ -56,7 +56,7 @@ POST /agent  { "request": "<natural language request>" }
  1. Guardrails            validate_request() — length checks, blocked terms
       │
       ▼
- 2. Planning              build_plan() — LangChain ChatPromptTemplate +
+ 2. Planning               build_plan() — LangChain ChatPromptTemplate +
                            PydanticOutputParser ask an LLM (ChatGroq) to
                            choose: doc_type, title, section outline,
                            assumptions. Falls back to a deterministic
